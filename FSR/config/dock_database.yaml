@@ -1,0 +1,9 @@
+docks:
+  flex_dock1:
+    type: "virtual_dock"
+    frame: "map"
+    pose: [-4.48, -5.84, -0.00357]
+  flex_dock2:
+    type: "nova_carter_dock"
+    frame: "map"
+    pose: [20.0, 20.0, 0.0]

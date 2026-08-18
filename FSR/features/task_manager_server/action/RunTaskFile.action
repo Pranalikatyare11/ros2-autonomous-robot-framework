@@ -1,0 +1,11 @@
+# Goal
+string filename
+---
+# Result
+bool success
+string message
+---
+# Feedback
+uint32 current_subtask
+uint32 total_subtasks
+string status_msg

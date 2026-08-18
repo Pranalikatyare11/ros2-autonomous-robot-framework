@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="simulator">
+<xacro:property name="controller_yaml_path" value="/home/panu/FSR_WS/src/FSR/config/controllers.yaml" />
+
+    <!-- ================= INERTIAL MACROS ================= -->
+    <xacro:macro name="inertial_sphere" params="mass radius origin_xyz origin_rpy">
+        <inertial>
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+            <mass value="${mass}" />
+            <inertia ixx="${(2/5) * mass * (radius*radius)}" ixy="0.0" ixz="0.0"
+                    iyy="${(2/5) * mass * (radius*radius)}" iyz="0.0"
+                    izz="${(2/5) * mass * (radius*radius)}" />
+        </inertial>
+    </xacro:macro>  
+
+    <xacro:macro name="inertial_box" params="mass x y z origin_xyz origin_rpy">
+        <inertial>
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+            <mass value="${mass}" />
+            <inertia ixx="${(1/12) * mass * (y*y+z*z)}" ixy="0.0" ixz="0.0"
+                    iyy="${(1/12) * mass * (x*x+z*z)}" iyz="0.0"
+                    izz="${(1/12) * mass * (x*x+y*y)}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="inertial_cylinder" params="mass length radius origin_xyz origin_rpy">
+        <inertial>
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+            <mass value="${mass}" />
+            <inertia ixx="${(1/12) * mass * (3*radius*radius + length*length)}" ixy="0.0" ixz="0.0"
+                    iyy="${(1/12) * mass * (3*radius*radius + length*length)}" iyz="0.0"
+                    izz="${(1/2) * mass * (radius*radius)}" />
+        </inertial>
+    </xacro:macro>
+
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <material name="blue">
+        <color rgba="1 0.3 0.1 1"/>
+    </material>
+
+    <material name="blurrywood">
+        <color rgba="1 0.4 0.2 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="orange">
+        <color rgba="1 0.3 0.1 1"/>
+    </material>
+
+    <material name="red">
+        <color rgba="1 0 0 1"/>
+    </material>
+
+    <!--BASE LINK-->
+    <link name="base_link">
+    </link>
+
+    <!-- BASE FOOTPRINT -->
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="base_footprint">
+    </link>
+
+    <!--CHASSIS LINK-->
+    <joint name="chassis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="-0.1 0 0"/>
+    </joint>
+
+    <link name="chassis">
+        <visual>
+            <origin xyz="0.25 0 0.1" />
+            <geometry>
+                <box size="0.5 0.3 0.2" />
+            </geometry>
+            <material name="blurrywood" />
+        </visual>
+        <collision>
+            <origin xyz="0.25 0 0.1" />
+            <geometry>
+                <box size="0.5 0.3 0.2" />
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.5" x="0.5" y="0.3" z="0.2" origin_xyz="0.25 0 0.1" origin_rpy="0 0 0"/>
+    </link>
+
+    <gazebo reference="chassis">
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- LEFT WHEEL LINK-->
+    <joint name="left_wheel_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="left_wheel" />
+        <origin xyz="0 0.175 0" rpy="-${pi/2} 0 0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <link name="left_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.04" />
+            </geometry>
+            <material name="black" />
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05" origin_xyz="0 0 0" origin_rpy="0 0 0"/>
+    </link>
+
+    <gazebo reference="left_wheel">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <!-- RIGHT WHEEL LINK-->
+    <joint name="right_wheel_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="right_wheel" />
+        <origin xyz="0 -0.175 0" rpy="${pi/2} 0 0" />
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <link name="right_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.04" />
+            </geometry>
+            <material name="black" />
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05" origin_xyz="0 0 0" origin_rpy="0 0 0"/>
+    </link>
+
+    <gazebo reference="right_wheel">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <!-- LEFT CASTER WHEEL -->
+    <joint name="left_caster_wheel_joint" type="fixed">
+        <parent link="chassis" />
+        <child link="left_caster_wheel" />
+        <origin xyz="0.4 0.175 0" rpy="-${pi/2} 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <link name="left_caster_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+            <material name="black" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05" origin_xyz="0 0 0" origin_rpy="0 0 0"/>
+    </link>
+
+    <gazebo reference="left_caster_wheel">
+        <material>Gazebo/Black</material>
+        <mu1 value="0.01" />
+        <mu2 value="0.01" />
+    </gazebo>
+
+    <!-- RIGHT CASTER WHEEL -->
+    <joint name="right_caster_wheel_joint" type="fixed">
+        <parent link="chassis" />
+        <child link="right_caster_wheel" />
+        <origin xyz="0.4 -0.175 0" rpy="${pi/2} 0 0"/>
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <link name="right_caster_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+            <material name="black" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05" origin_xyz="0 0 0" origin_rpy="0 0 0"/>
+    </link>
+
+    <gazebo reference="right_caster_wheel">
+        <material>Gazebo/Black</material>
+        <mu1 value="0.01" />
+        <mu2 value="0.01" />
+    </gazebo>
+
+    <!-- ================= LIDAR / LASER ================= -->
+    <joint name="laser_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="laser_frame"/>
+        <origin xyz="0.3 0 0.21" rpy="0 0 0"/>
+    </joint>
+
+    <link name="laser_frame">
+        <visual>
+            <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+            <material name="white"/>
+        </visual>
+        <collision>
+            <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05" origin_xyz="0 0 0" origin_rpy="0 0 0"/>
+    </link>
+
+    <gazebo reference="laser_frame">
+        <material>Gazebo/White</material>
+        <sensor name="laser" type="ray">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>720</samples>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.12</min>
+                    <max>12.0</max>
+                </range>
+            </ray>
+            <plugin name="scan" filename="libgazebo_ros_ray_sensor.so">
+              <ros>
+                <remapping>~/out:=/scan</remapping>
+              </ros>
+              <output_type>sensor_msgs/LaserScan</output_type>
+              <frame_name>laser_frame</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+
+
+
+    <!-- ================= ROS2 CONTROL ================= -->
+    <ros2_control name="GazeboSystem" type="system">
+        <hardware>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+        <joint name="left_wheel_joint">
+            <command_interface name="velocity">
+                <param name="min">-10</param>
+                <param name="max">10</param>
+            </command_interface>
+            <state_interface name="velocity"/>
+            <state_interface name="position"/>
+        </joint>
+        <joint name="right_wheel_joint">
+            <command_interface name="velocity">
+                <param name="min">-10</param>
+                <param name="max">10</param>
+            </command_interface>
+            <state_interface name="velocity"/>
+            <state_interface name="position"/>
+        </joint>
+    </ros2_control>
+
+    <gazebo>
+        <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+            <parameters>${controller_yaml_path}</parameters>
+        </plugin>
+    </gazebo>
+
+</robot>

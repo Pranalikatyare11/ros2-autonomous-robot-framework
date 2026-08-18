@@ -1,0 +1,35 @@
+k1:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: -0.014
+      y: 4.597
+      z: 0.005
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: -0.933974223965573
+      w: 0.3573403825037212
+k2:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: -1.945
+      y: 2.866
+      z: 0.0
+    orientation: &id001
+      x: 0.0
+      y: 0.0
+      z: -0.3716051629079379
+      w: 0.9283908675230303
+k3:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: 3.511
+      y: -2.335
+      z: -0.003
+    orientation: *id001

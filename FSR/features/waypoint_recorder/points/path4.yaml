@@ -1,0 +1,48 @@
+c1:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: -1.021
+      y: 0.607
+      z: 0.008
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: -0.9579510385544351
+      w: 0.28693171266431877
+c2:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: -4.443
+      y: -1.645
+      z: 0.004
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: -0.9319322965605072
+      w: 0.3626323132698723
+c3:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: -9.075
+      y: -5.893
+      z: -0.002
+    orientation: &id001
+      x: 0.0
+      y: 0.0
+      z: 0.27059091413194397
+      w: 0.9626944256560536
+c4:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: 5.575
+      y: 3.049
+      z: 0.005
+    orientation: *id001

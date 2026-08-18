@@ -1,0 +1,48 @@
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+
+  <ReactiveFallback name="SafetyLayer">
+
+      <!-- 1. Dock if battery is low -->
+      <Sequence name="DockIfLowBattery">
+        <IsBatteryLow min_battery="0.2" battery_topic="/battery_status"/>
+        <DockRobot use_dock_id="true" dock_id="flex_dock1" navigate_to_staging_pose="true" max_staging_time="30.0"/>
+        <Wait wait_duration="2.0"/>
+      </Sequence>
+
+      <!-- 2. Undock if battery is full -->
+      <Sequence name="UndockIfCharged">
+        <IsBatteryCharging battery_topic="/battery_status"/>
+        <UndockRobot dock_type="virtual_dock" max_undocking_time="30.0"/>
+        <Wait wait_duration="1.0"/>
+      </Sequence>
+
+    <RecoveryNode number_of_retries="6" name="NavigateRecovery">
+      <PipelineSequence name="NavigateWithReplanning">
+        <RateController hz="1.0">
+          <RecoveryNode number_of_retries="1" name="ComputePathToPose">
+            <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+            <ClearEntireCostmap name="ClearGlobalCostmap-Context" service_name="global_costmap/clear_entirely_global_costmap"/>
+          </RecoveryNode>
+        </RateController>
+        <RecoveryNode number_of_retries="1" name="FollowPath">
+          <FollowPath path="{path}" controller_id="FollowPath"/>
+          <ClearEntireCostmap name="ClearLocalCostmap-Context" service_name="local_costmap/clear_entirely_local_costmap"/>
+        </RecoveryNode>
+      </PipelineSequence>
+      <ReactiveFallback name="RecoveryFallback">
+        <GoalUpdated/>
+        <RoundRobin name="RecoveryActions">
+          <Sequence name="ClearingActions">
+            <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/>
+            <ClearEntireCostmap name="ClearGlobalCostmap-Subtree" service_name="global_costmap/clear_entirely_global_costmap"/>
+          </Sequence>
+          <Spin spin_dist="1.57"/>
+          <Wait wait_duration="5"/>
+          <BackUp backup_dist="0.30" backup_speed="0.05"/>
+        </RoundRobin>
+      </ReactiveFallback>
+     </RecoveryNode>
+    </ReactiveFallback>
+  </BehaviorTree>
+</root>

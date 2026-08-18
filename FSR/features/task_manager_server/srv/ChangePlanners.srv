@@ -1,0 +1,8 @@
+# Request
+string global_planner  
+string local_planner   
+
+---
+# Response
+bool success
+string message

@@ -1,0 +1,61 @@
+m1:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: 2.93
+      y: -5.387
+      z: -0.003
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.5620014792894974
+      w: 0.8271362265530489
+m2:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: 4.332
+      y: -1.848
+      z: -0.004
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.9555170804721123
+      w: 0.2949357708485882
+m3:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: -4.514
+      y: 4.188
+      z: 0.007
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.004027519953521699
+      w: 0.999991889508622
+m4:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: 0.7
+      y: 4.23
+      z: 0.007
+    orientation: &id001
+      x: 0.0
+      y: 0.0
+      z: 0.9838375405307721
+      w: 0.17906337940059458
+m5:
+  header:
+    frame_id: map
+  pose:
+    position:
+      x: -2.591
+      y: 5.469
+      z: 0.001
+    orientation: *id001
