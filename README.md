@@ -1,4 +1,4 @@
-<img width="1855" height="1056" alt="Screenshot from 2025-11-27 13-50-44" src="https://github.com/user-attachments/assets/8d6d6949-f516-4d4d-82ea-5924f0de452e" />FSR — Autonomous Robot Control Framework
+#FSR — Autonomous Robot Control Framework
 
 A system-level ROS 2 autonomous robot control framework, developed as a higher-level orchestration layer around Nav2. It integrates navigation, task execution, localization, mapping, robot-state management, safety zones, simulation, waypoint management, and battery-aware docking into a modular architecture.
 
